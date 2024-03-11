@@ -22,8 +22,13 @@ moongose
   })
   .catch((err) => console.log(err));
 
-app.get("/hello", (req, res) => {
-  res.send("Hello World!");
+app.get("/api/prodcuts", async (req, res) => {
+  try {
+    products = await Product.find();
+    res.status(200).json({ status: "Sucess", products: products });
+  } catch (err) {
+    res.status(500).json({ status: err.message });
+  }
 });
 
 app.post("/api/products", async (req, res) => {
