@@ -5,6 +5,9 @@ const app = express();
 const port = 3000;
 
 require("dotenv").config();
+app.use(express.json());
+
+const Product = require("./models/product.model.js");
 
 moongose
   .connect(
@@ -18,8 +21,17 @@ moongose
     });
   })
   .catch((err) => console.log(err));
-''
 
 app.get("/hello", (req, res) => {
   res.send("Hello World!");
+});
+
+app.post("/api/products", async (req, res) => {
+  try {
+    const product = await Product.create(req.body);
+
+    res.status(200).json({ status: "Product created!", product: product });
+  } catch (err) {
+    res.status(500).json({ status: err.message });
+  }
 });
